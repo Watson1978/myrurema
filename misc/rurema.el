@@ -6,7 +6,12 @@
 ; To install, put this in your .emacs:
 ;
 ; (require 'rurema)
-; 
+;
+;
+; Usage:
+;
+; M-x rurema
+;
 
 (defvar rurema-program-name
   (if (featurep 'meadow)
