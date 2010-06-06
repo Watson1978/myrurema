@@ -11,6 +11,7 @@ class Options
     @rubyver = RUBY_VERSION
     @command = nil
     @query = ""
+    @option = {}
 
     @optionparser = OptionParser.new{|o|
       o.on("--init",
@@ -34,6 +35,10 @@ class Options
            "specify Ruby version (default: #{@rubyver})"){|str|
         @rubyver = str
       }
+      o.on("--all",
+           "Prints descriptions for all matched entries"){
+        @option[:all] = true
+      }
       o.on("--help",
            "show this message"){
         puts o
@@ -43,7 +48,7 @@ class Options
     @query = @optionparser.parse(argv).join(" ")
   end
   attr_reader :dry_run, :ruremadir, :rubyver
-  attr_reader :command, :query
+  attr_reader :command, :query, :option
 
   def usage
     puts @optionparser
@@ -89,8 +94,11 @@ class Rurema
       end
     end
 
+    option   = "--all" if(@opt.option[:all])
+    option ||= ""
+
     sh "#{bitclust_path/'bin/refe.rb'}" +
-          " #{query} -d #{db_path(ver)}", :silent => true
+          " #{query} #{option} -d #{db_path(ver)}", :silent => true
   end
 
   def server
